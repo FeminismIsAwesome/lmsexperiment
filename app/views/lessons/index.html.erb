@@ -7,17 +7,35 @@
 <div id="lessons">
   <% @lessons.each do |lesson| %>
     <%= render lesson %>
-    <p>
+    <div style="margin-bottom: 20px;">
       <% if @is_student %>
         <%= link_to "View this lesson", student_show_lesson_path(lesson) %>
       <% else %>
         <%= link_to "Show this lesson", lesson %>
         (<%= lesson.pages.sum { |p| p.page_views.count } %> total unique page views)
+        <div style="margin-top: 5px;">
+          <% lesson_url = student_show_lesson_url(lesson) %>
+          <%= qr_code_as_svg(lesson_url) %>
+          <br>
+          <code style="font-size: 10px;"><%= lesson_url %></code>
+        </div>
       <% end %>
-    </p>
+    </div>
   <% end %>
 </div>
 
 <% unless @is_student %>
-  <%= link_to "New lesson", new_lesson_path %>
+  <div style="margin-top: 40px; padding: 20px; border: 1px dashed #ccc; display: inline-block;">
+    <h3>Student Access QR Code</h3>
+    <p>Scan this code to go directly to the student view:</p>
+    <% student_url = student_index_lessons_url %>
+    <div style="margin-bottom: 10px;">
+      <%= qr_code_as_svg(student_url) %>
+    </div>
+    <code><%= student_url %></code>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <%= link_to "New lesson", new_lesson_path %>
+  </div>
 <% end %>

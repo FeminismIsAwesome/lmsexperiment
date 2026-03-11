@@ -39,6 +39,15 @@
         <div style="margin-top: 10px;">
           <%= button_to "Destroy this lesson", @lesson, method: :delete, data: { confirm: "Are you sure?" }, style: "color: red;" %>
         </div>
+
+        <div style="margin-top: 20px; padding: 10px; border: 1px dashed #ccc;">
+          <h4>Student QR Code</h4>
+          <% student_url = student_show_lesson_url(@lesson) %>
+          <div style="margin-bottom: 5px;">
+            <%= qr_code_as_svg(student_url) %>
+          </div>
+          <code style="font-size: 10px; word-break: break-all;"><%= student_url %></code>
+        </div>
       <% end %>
     </div>
   </div>
