@@ -1,0 +1,21 @@
+databases:
+  - name: marriagedb
+    databaseName: mysite
+    user: mysite
+    plan: free
+
+services:
+  - type: web
+    name: lms-spike
+    env: ruby
+    buildCommand: ./bin/render-build.sh
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: marriagedb
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "true"

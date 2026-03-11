@@ -8,7 +8,7 @@ User.find_or_create_by!(email: "instructor@example.com") do |u|
   u.password = "password123"
   u.password_confirmation = "password123"
 end
-puts "Instructor ready: instructor@example.com / password123"
+puts "Instructor ready: instructor@example.com / add a"
 
 # 2. Create Sample Lessons
 puts "Creating Sample Lessons..."
