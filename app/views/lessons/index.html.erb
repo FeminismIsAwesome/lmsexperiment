@@ -1,0 +1,23 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Lessons" %>
+
+<h1><%= @is_student ? "Available Lessons" : "Lessons" %></h1>
+
+<div id="lessons">
+  <% @lessons.each do |lesson| %>
+    <%= render lesson %>
+    <p>
+      <% if @is_student %>
+        <%= link_to "View this lesson", student_show_lesson_path(lesson) %>
+      <% else %>
+        <%= link_to "Show this lesson", lesson %>
+        (<%= lesson.pages.sum { |p| p.page_views.count } %> total unique page views)
+      <% end %>
+    </p>
+  <% end %>
+</div>
+
+<% unless @is_student %>
+  <%= link_to "New lesson", new_lesson_path %>
+<% end %>

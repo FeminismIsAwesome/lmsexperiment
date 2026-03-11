@@ -1,0 +1,55 @@
+<%= form_with(model: page) do |form| %>
+  <% if page.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(page.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+      <ul>
+        <% page.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :lesson_id, style: "display: block" %>
+    <%= form.collection_select :lesson_id, Lesson.all, :id, :title %>
+  </div>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :content, style: "display: block" %>
+    <%= form.rich_textarea :content %>
+  </div>
+
+  <div>
+    <%= form.label :position, style: "display: block" %>
+    <%= form.number_field :position %>
+  </div>
+
+  <div style="margin-top: 20px; border: 1px solid #ddd; padding: 10px;" data-controller="nested-form">
+    <h3>Survey Questions</h3>
+    
+    <template data-nested-form-target="template">
+      <%= form.fields_for :questions, Question.new, child_index: "NEW_RECORD" do |question_form| %>
+        <%= render "pages/question_fields", f: question_form %>
+      <% end %>
+    </template>
+
+    <div data-nested-form-target="target">
+      <%= form.fields_for :questions do |question_form| %>
+        <%= render "pages/question_fields", f: question_form %>
+      <% end %>
+    </div>
+
+    <button type="button" data-action="nested-form#add">Add Question</button>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= form.submit %>
+  </div>
+<% end %>

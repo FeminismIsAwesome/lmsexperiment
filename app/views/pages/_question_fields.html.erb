@@ -1,0 +1,31 @@
+<div class="nested-fields" data-new-record="<%= f.object.new_record? %>" style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+  <%= f.label :text, "Question Text" %>
+  <%= f.text_field :text, style: "display: block; width: 100%;" %>
+
+  <div style="margin-top: 10px;">
+    <%= f.check_box :multiple_answers %>
+    <%= f.label :multiple_answers, "Allow multiple answers (checkboxes)" %>
+  </div>
+
+  <div style="margin-left: 20px; margin-top: 10px;">
+    <h4>Options</h4>
+    <div data-controller="nested-form">
+      <template data-nested-form-target="template">
+        <%= f.fields_for :question_options, QuestionOption.new, child_index: "NEW_RECORD" do |option_form| %>
+          <%= render "pages/question_option_fields", f: option_form %>
+        <% end %>
+      </template>
+
+      <div data-nested-form-target="target">
+        <%= f.fields_for :question_options do |option_form| %>
+          <%= render "pages/question_option_fields", f: option_form %>
+        <% end %>
+      </div>
+
+      <button type="button" data-action="nested-form#add">Add Option</button>
+    </div>
+  </div>
+
+  <%= f.hidden_field :_destroy %>
+  <button type="button" data-action="click->nested-form#remove">Remove Question</button>
+</div>

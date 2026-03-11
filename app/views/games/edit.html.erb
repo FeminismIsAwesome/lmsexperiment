@@ -1,0 +1,14 @@
+<h1>Editing game</h1>
+
+<%= render "form", game: @game %>
+
+<br>
+
+<div>
+  <%= link_to "Show this game", lesson_path(@game.lesson, game_id: @game.id) %> |
+  <%= link_to "Back to lesson", lesson_path(@game.lesson) %>
+</div>
+
+<div style="margin-top: 20px;">
+  <%= button_to "Destroy this game", @game, method: :delete, data: { confirm: "Are you sure?" }, style: "color: red;" %>
+</div>

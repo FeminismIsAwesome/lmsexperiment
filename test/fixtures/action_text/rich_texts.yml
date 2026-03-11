@@ -1,0 +1,9 @@
+page_one_content:
+  record: one (Page)
+  name: content
+  body: <div>Content for page one</div>
+
+page_two_content:
+  record: two (Page)
+  name: content
+  body: <div>Content for page two</div>

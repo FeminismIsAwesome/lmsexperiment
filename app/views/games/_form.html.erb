@@ -1,0 +1,31 @@
+<%= form_with(model: game) do |form| %>
+  <% if game.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(game.errors.count, "error") %> prohibited this game from being saved:</h2>
+      <ul>
+        <% game.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :lesson_id, style: "display: block" %>
+    <%= form.collection_select :lesson_id, Lesson.all, :id, :title %>
+  </div>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :game_type, style: "display: block" %>
+    <%= form.select :game_type, [["Memory Match", "memory_match"]] %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= form.submit %>
+  </div>
+<% end %>

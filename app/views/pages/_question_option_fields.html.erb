@@ -1,0 +1,6 @@
+<div class="nested-fields" data-new-record="<%= f.object.new_record? %>" style="margin-bottom: 5px;">
+  <%= f.label :text, "Option Text" %>
+  <%= f.text_field :text %>
+  <%= f.hidden_field :_destroy %>
+  <button type="button" data-action="click->nested-form#remove">Remove Option</button>
+</div>

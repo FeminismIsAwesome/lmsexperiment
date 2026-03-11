@@ -1,0 +1,57 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= @lesson.title %></h1>
+
+<div style="display: flex; gap: 20px;">
+  <div class="sidebar" style="flex: 0 0 250px; border-right: 1px solid #ccc; padding-right: 20px;">
+    <h3>Pages</h3>
+    <div class="tabs" style="display: flex; flex-direction: column; gap: 5px;">
+      <h4>Pages</h4>
+      <% @pages.each do |page| %>
+        <% active = (@current_page == page) %>
+        <% path = @is_student ? student_show_lesson_path(@lesson, page_id: page.id) : lesson_path(@lesson, page_id: page.id) %>
+        <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; <%= active ? 'background-color: #eee; font-weight: bold;' : '' %>">
+          <%= link_to page.title, path, style: "text-decoration: none; color: black;" %>
+        </div>
+      <% end %>
+
+      <% if @games.any? %>
+        <h4 style="margin-top: 20px;">Games</h4>
+        <% @games.each do |game| %>
+          <% active = (@current_game == game) %>
+          <% path = @is_student ? student_show_lesson_path(@lesson, game_id: game.id) : lesson_path(@lesson, game_id: game.id) %>
+          <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; <%= active ? 'background-color: #eee; font-weight: bold;' : '' %>">
+            <%= link_to game.title, path, style: "text-decoration: none; color: black;" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">
+      <% if @is_student %>
+        <%= link_to "Back to lessons", student_index_lessons_path %>
+      <% else %>
+        <%= link_to "Edit this lesson", edit_lesson_path(@lesson) %> <br>
+        <%= link_to "Back to lessons", lessons_path %> <br>
+        <%= link_to "Add a new page", new_page_path(lesson_id: @lesson.id) %> <br>
+        <%= link_to "Add a new game", new_game_path(lesson_id: @lesson.id) %>
+
+        <div style="margin-top: 10px;">
+          <%= button_to "Destroy this lesson", @lesson, method: :delete, data: { confirm: "Are you sure?" }, style: "color: red;" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="content-area" style="flex: 1;">
+    <div class="page-content">
+      <% if @current_page %>
+        <%= render @current_page %>
+      <% elsif @current_game %>
+        <%= render @current_game %>
+      <% else %>
+        <p>No content in this lesson yet.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

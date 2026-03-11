@@ -1,0 +1,90 @@
+<div id="<%= dom_id page %>">
+  <div>
+    <strong>Lesson:</strong>
+    <%= page.lesson.title %>
+  </div>
+
+  <div>
+    <strong>Title:</strong>
+    <%= page.title %>
+  </div>
+
+  <div>
+    <strong>Content:</strong>
+    <div style="border: 1px solid #ccc; padding: 10px; margin-top: 5px;">
+      <%= page.content %>
+    </div>
+  </div>
+
+  <div>
+    <strong>Position:</strong>
+    <%= page.position %>
+  </div>
+
+  <% if page.questions.any? %>
+    <div style="margin-top: 30px; border: 1px solid #eee; padding: 15px; background-color: #f9f9f9;">
+      <h3>Survey</h3>
+      <% page.questions.each do |question| %>
+        <div style="margin-bottom: 20px;">
+          <p><strong><%= question.text %></strong></p>
+
+          <% user_responses = question.question_responses.where(session_hash: session_hash) %>
+
+          <% if user_responses.any? || !@is_student %>
+            <p>
+              Total respondents: <%= question.total_respondents %>
+            </p>
+            <ul>
+              <% question.question_options.each do |option| %>
+                <li>
+                  <%= option.text %>: 
+                  <strong><%= question.question_responses.where(question_option: option).count %></strong> votes 
+                  (<%= question.response_percentage(option) %>%)
+                  <%= "<- Your choice" if user_responses.exists?(question_option: option) %>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <%= form_with url: question_responses_path, method: :post do |f| %>
+              <%= f.hidden_field :question_id, value: question.id %>
+              <% question.question_options.each do |option| %>
+                <div style="margin-bottom: 5px;">
+                  <% if question.multiple_answers %>
+                    <%= f.check_box "question_option_ids[]", { id: "option_#{option.id}" }, option.id, nil %>
+                  <% else %>
+                    <%= f.radio_button :question_option_id, option.id, id: "option_#{option.id}" %>
+                  <% end %>
+                  <%= f.label "option_#{option.id}", option.text %>
+                </div>
+              <% end %>
+              <%= f.submit "Submit Answer", style: "margin-top: 10px;" %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <hr>
+  <div style="display: flex; justify-content: space-between;">
+    <span>
+      <% if page.previous_page %>
+        <% prev_path = @is_student ? student_show_lesson_path(page.lesson, page_id: page.previous_page.id) : lesson_path(page.lesson, page_id: page.previous_page.id) %>
+        <%= link_to "← Previous: #{page.previous_page.title}", prev_path %>
+      <% end %>
+    </span>
+    <span>
+      <% back_path = @is_student ? student_show_lesson_path(page.lesson) : lesson_path(page.lesson) %>
+      <%= link_to "Back to Lesson", back_path %>
+      <% unless @is_student %>
+        | <%= link_to "Edit this page", edit_page_path(page) %>
+      <% end %>
+    </span>
+    <span>
+      <% if page.next_page %>
+        <% next_path = @is_student ? student_show_lesson_path(page.lesson, page_id: page.next_page.id) : lesson_path(page.lesson, page_id: page.next_page.id) %>
+        <%= link_to "Next: #{page.next_page.title} →", next_path %>
+      <% end %>
+    </span>
+  </div>
+</div>

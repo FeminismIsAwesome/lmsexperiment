@@ -1,0 +1,43 @@
+<div id="<%= dom_id game %>">
+  <h2><%= game.title %></h2>
+
+  <% if game.game_type == "memory_match" %>
+    <div data-controller="memory-match" 
+         data-memory-match-words-value='["Honest", "trust", "equality", "boundaries", "communication", "respect"]'
+         data-memory-match-game-id-value="<%= game.id %>">
+      
+      <p>Match the pairs of words!</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px;" data-memory-match-target="grid">
+        <!-- Cards will be injected by Stimulus -->
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <p>Attempts: <span data-memory-match-target="attempts">0</span></p>
+        <p data-memory-match-target="status" style="font-weight: bold; color: green;"></p>
+        <button type="button" data-action="click->memory-match#reset">Reset Game</button>
+      </div>
+    </div>
+  <% else %>
+    <p>Unknown game type: <%= game.game_type %></p>
+  <% end %>
+
+  <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+    <% unless @is_student %>
+      <div style="background-color: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+        <h3>Instructor View: Game Interactions (Aggregate)</h3>
+        <ul>
+          <li>Unique students who started: <%= game.unique_starts %></li>
+          <li>Unique students who completed: <%= game.unique_completions %></li>
+          <li>Unique students who engaged deeply (3+ flips): <%= game.unique_engagements %></li>
+        </ul>
+      </div>
+    <% end %>
+
+    <% back_path = @is_student ? student_show_lesson_path(game.lesson) : lesson_path(game.lesson) %>
+    <%= link_to "Back to Lesson", back_path %>
+    <% unless @is_student %>
+      | <%= link_to "Edit this game", edit_game_path(game) %>
+    <% end %>
+  </div>
+</div>

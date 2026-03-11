@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lesson: one
+  title: Page 1
+  position: 1
+
+two:
+  lesson: one
+  title: Page 2
+  position: 2
