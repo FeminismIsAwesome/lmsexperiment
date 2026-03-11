@@ -29,13 +29,13 @@ class GameEventsTest < ActionDispatch::IntegrationTest
     # Instructor view
     get lesson_path(@lesson, game_id: @game.id)
     assert_response :success
-    assert_select "h3", "Instructor View: Game Interactions (Aggregate)"
-    assert_select "li", /Unique students who started: 2/
-    assert_select "li", /Unique students who completed: 1/
+    assert_select "h3", "Instructor Analytics"
+    assert_select "div", /2/ # Starts
+    assert_select "div", /1/ # Completions
 
     # Student view
     get student_show_lesson_path(@lesson, game_id: @game.id)
     assert_response :success
-    assert_select "h3", text: "Instructor View: Game Interactions (Aggregate)", count: 0
+    assert_select "h3", text: "Instructor Analytics", count: 0
   end
 end

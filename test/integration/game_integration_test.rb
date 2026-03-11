@@ -21,7 +21,7 @@ class GameIntegrationTest < ActionDispatch::IntegrationTest
     assert_redirected_to lesson_path(@lesson, game_id: Game.last.id)
     follow_redirect!
     
-    assert_select "h2", "Social Wellbeing - The Principle of Relationship Game"
+    assert_select "h1", "Social Wellbeing - The Principle of Relationship Game"
     assert_select "[data-controller='memory-match']"
     
     # Check if words are correctly passed to the controller
@@ -37,12 +37,12 @@ class GameIntegrationTest < ActionDispatch::IntegrationTest
     get student_show_lesson_path(@lesson, game_id: game.id)
     assert_response :success
     
-    assert_select "h2", "Test Game"
+    assert_select "h1", "Test Game"
     assert_select "a", text: "Edit this game", count: 0
     assert_select "a", text: "Add a new game", count: 0
     
     # Check for the sidebar link
-    assert_select "div.sidebar" do
+    assert_select "aside.sidebar" do
       assert_select "a", text: "Test Game"
     end
   end

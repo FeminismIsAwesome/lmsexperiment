@@ -24,22 +24,31 @@
   </head>
 
   <body>
-    <% if notice %>
-      <p class="notice" style="color: green;"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert" style="color: red;"><%= alert %></p>
-    <% end %>
+    <nav class="navbar">
+      <div class="container">
+        <%= link_to "LMS Spike", root_path, class: "navbar-brand" %>
+        <div class="nav-links">
+          <% if user_signed_in? %>
+            <span class="nav-link" style="cursor: default;">
+              Logged in as: <strong><%= current_user.email %></strong>
+            </span>
+            <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-outline" %>
+          <% else %>
+            <%= link_to "Instructor Sign in", new_user_session_path, class: "nav-link" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
 
-    <div style="margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #ccc;">
-      <% if user_signed_in? %>
-        Logged in as: <strong><%= current_user.email %></strong> |
-        <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete } %>
-      <% else %>
-        <%= link_to "Instructor Sign in", new_user_session_path %>
+    <main class="container">
+      <% if notice %>
+        <div class="alert-box alert-success"><%= notice %></div>
       <% end %>
-    </div>
+      <% if alert %>
+        <div class="alert-box alert-danger"><%= alert %></div>
+      <% end %>
 
-    <%= yield %>
+      <%= yield %>
+    </main>
   </body>
 </html>

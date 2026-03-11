@@ -49,16 +49,20 @@ export default class extends Controller {
     card.dataset.action = "click->memory-match#flip"
     
     card.style.height = "100px"
-    card.style.border = "2px solid #333"
-    card.style.borderRadius = "8px"
+    card.style.border = "1px solid #e2e8f0"
+    card.style.borderRadius = "0.5rem"
     card.style.display = "flex"
     card.style.alignItems = "center"
     card.style.justifyContent = "center"
     card.style.cursor = "pointer"
-    card.style.backgroundColor = "#ddd"
-    card.style.fontSize = "14px"
+    card.style.backgroundColor = "white"
+    card.style.color = "transparent"
+    card.style.fontSize = "0.875rem"
+    card.style.fontWeight = "500"
     card.style.textAlign = "center"
-    card.style.padding = "5px"
+    card.style.padding = "0.5rem"
+    card.style.boxShadow = "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+    card.style.transition = "all 0.2s"
     
     card.innerHTML = `<span style="display: none;">${word}</span>`
     
@@ -71,6 +75,9 @@ export default class extends Controller {
     if (clickedCard === this.firstCard) return
 
     clickedCard.style.backgroundColor = "white"
+    clickedCard.style.color = "var(--primary-color)"
+    clickedCard.style.borderColor = "var(--primary-color)"
+    clickedCard.style.boxShadow = "var(--shadow-md)"
     clickedCard.querySelector("span").style.display = "block"
 
     if (!this.firstCard) {
@@ -104,10 +111,14 @@ export default class extends Controller {
     this.firstCard.removeEventListener("click", this.flip)
     this.secondCard.removeEventListener("click", this.flip)
     
-    this.firstCard.style.borderColor = "green"
-    this.secondCard.style.borderColor = "green"
-    this.firstCard.style.backgroundColor = "#e6ffe6"
-    this.secondCard.style.backgroundColor = "#e6ffe6"
+    this.firstCard.style.borderColor = "#10b981"
+    this.secondCard.style.borderColor = "#10b981"
+    this.firstCard.style.backgroundColor = "#ecfdf5"
+    this.secondCard.style.backgroundColor = "#ecfdf5"
+    this.firstCard.style.color = "#059669"
+    this.secondCard.style.color = "#059669"
+    this.firstCard.style.cursor = "default"
+    this.secondCard.style.cursor = "default"
 
     this.resetBoard()
     this.matches++
@@ -125,9 +136,16 @@ export default class extends Controller {
     this.lockBoard = true
     
     setTimeout(() => {
-      this.firstCard.style.backgroundColor = "#ddd"
+      this.firstCard.style.backgroundColor = "white"
+      this.firstCard.style.color = "transparent"
+      this.firstCard.style.borderColor = "#e2e8f0"
+      this.firstCard.style.boxShadow = "var(--shadow-sm)"
       this.firstCard.querySelector("span").style.display = "none"
-      this.secondCard.style.backgroundColor = "#ddd"
+      
+      this.secondCard.style.backgroundColor = "white"
+      this.secondCard.style.color = "transparent"
+      this.secondCard.style.borderColor = "#e2e8f0"
+      this.secondCard.style.boxShadow = "var(--shadow-sm)"
       this.secondCard.querySelector("span").style.display = "none"
       
       this.resetBoard()

@@ -6,7 +6,7 @@ class QrCodeIntegrationTest < ActionDispatch::IntegrationTest
     lesson = lessons(:one)
     get lessons_path
     assert_response :success
-    assert_select "h3", "Student Access QR Code"
+    assert_select "h3", "Global Student Access"
     # One for global access, plus one for each lesson (fixture has one lesson 'one' by default usually)
     # Actually fixtures might have more. Let's check how many SVGs are there.
     # At least 2: one for student_index, one for lesson 'one'
@@ -16,21 +16,21 @@ class QrCodeIntegrationTest < ActionDispatch::IntegrationTest
 
     get lesson_path(lesson)
     assert_response :success
-    assert_select "h4", "Student QR Code"
+    assert_select "p", "Direct Student Link"
     assert_select "svg"
-    assert_select "code", student_show_lesson_url(lesson)
+    # assert_select "code", student_show_lesson_url(lesson) # We removed this from lesson show page UI
   end
 
   test "student does not see QR codes" do
     lesson = lessons(:one)
     get student_index_lessons_path
     assert_response :success
-    assert_select "h3", text: "Student Access QR Code", count: 0
+    assert_select "h3", text: "Global Student Access", count: 0
     assert_select "svg", count: 0
 
     get student_show_lesson_path(lesson)
     assert_response :success
-    assert_select "h4", text: "Student QR Code", count: 0
+    assert_select "p", text: "Direct Student Link", count: 0
     assert_select "svg", count: 0
   end
 end

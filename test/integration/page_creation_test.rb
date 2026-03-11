@@ -31,11 +31,11 @@ class PageCreationTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to lesson_path(@lesson, page_id: Page.last.id)
     follow_redirect!
-    assert_select "h3", "Survey"
+    assert_select "h3", "Knowledge Check"
     assert_select "p", text: "First Question?"
-    assert_select "li", /Option 1: 0 votes \(0%\)/
-    assert_select "li", /Option 2: 0 votes \(0%\)/
-    assert_select "li", /Option 3: 0 votes \(0%\)/
+    assert_select "div", /Option 1/
+    assert_select "div", /Option 2/
+    assert_select "div", /Option 3/
   end
 
   test "should update page and preserve questions and options" do

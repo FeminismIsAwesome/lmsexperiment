@@ -1,47 +1,57 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Lessons" %>
 
-<h1><%= @is_student ? "Available Lessons" : "Lessons" %></h1>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <h1><%= @is_student ? "Available Lessons" : "Manage Lessons" %></h1>
+  <% unless @is_student %>
+    <%= link_to "New Lesson", new_lesson_path, class: "btn btn-primary" %>
+  <% end %>
+</div>
 
 <% unless @is_student %>
-  <div style="background-color: #fff9c4; padding: 10px; margin-bottom: 20px; border: 1px solid #fbc02d; border-radius: 5px; display: inline-block;">
-    <strong>Instructor Mode</strong>
+  <div class="instructor-badge">
+    Instructor Mode
   </div>
 <% end %>
 
-<div id="lessons">
+<div id="lessons" class="lessons-grid">
   <% @lessons.each do |lesson| %>
-    <%= render lesson %>
-    <div style="margin-bottom: 20px;">
-      <% if @is_student %>
-        <%= link_to "View this lesson", student_show_lesson_path(lesson) %>
-      <% else %>
-        <%= link_to "Show this lesson", lesson %>
-        (<%= lesson.pages.sum { |p| p.page_views.count } %> total unique page views)
-        <div style="margin-top: 5px;">
-          <% lesson_url = student_show_lesson_url(lesson) %>
-          <%= qr_code_as_svg(lesson_url) %>
-          <br>
-          <code style="font-size: 10px;"><%= lesson_url %></code>
-        </div>
+    <div class="card">
+      <h2 class="card-title"><%= lesson.title %></h2>
+      
+      <% unless @is_student %>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+          <%= lesson.pages.sum { |p| p.page_views.count } %> unique views
+        </p>
       <% end %>
+
+      <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <% if @is_student %>
+          <%= link_to "Start Learning", student_show_lesson_path(lesson), class: "btn btn-primary" %>
+        <% else %>
+          <%= link_to "Manage Content", lesson, class: "btn btn-primary" %>
+          
+          <div class="qr-container">
+            <p style="font-size: 0.75rem; margin-bottom: 0.5rem; font-weight: 600;">Student Access</p>
+            <div class="qr-code">
+              <%= qr_code_as_svg(student_show_lesson_url(lesson)) %>
+            </div>
+            <code style="font-size: 9px; word-break: break-all; margin-top: 0.5rem; display: block;">
+              <%= student_show_lesson_url(lesson) %>
+            </code>
+          </div>
+        <% end %>
+      </div>
     </div>
   <% end %>
 </div>
 
 <% unless @is_student %>
-  <div style="margin-top: 40px; padding: 20px; border: 1px dashed #ccc; display: inline-block;">
-    <h3>Student Access QR Code</h3>
-    <p>Scan this code to go directly to the student view:</p>
-    <% student_url = student_index_lessons_url %>
-    <div style="margin-bottom: 10px;">
-      <%= qr_code_as_svg(student_url) %>
+  <div class="card" style="margin-top: 4rem; border-style: dashed; text-align: center;">
+    <h3>Global Student Access</h3>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Share this code for the full lesson catalog</p>
+    <div class="qr-code" style="margin: 0 auto 1rem;">
+      <%= qr_code_as_svg(student_index_lessons_url) %>
     </div>
-    <code><%= student_url %></code>
-  </div>
-
-  <div style="margin-top: 20px;">
-    <%= link_to "New lesson", new_lesson_path %>
+    <code><%= student_index_lessons_url %></code>
   </div>
 <% end %>

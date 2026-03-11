@@ -25,9 +25,9 @@ class SurveyIntegrationTest < ActionDispatch::IntegrationTest
     
     assert_redirected_to lesson_path(@lesson, page_id: @page.id)
     follow_redirect!
-    assert_select "li", text: /Apple:.*1.*votes.*\(100.0%\).*<- Your choice/
-    assert_select "li", text: /Banana:.*1.*votes.*\(100.0%\).*<- Your choice/
-    assert_select "li", text: /Cherry:.*0.*votes.*\(0.0%\)/
+    assert_select "div", text: /Apple.*Your choice.*100.0%/
+    assert_select "div", text: /Banana.*Your choice.*100.0%/
+    assert_select "div", text: /Cherry.*0.0%/
   end
 
   test "can submit single answer for a single-choice question" do
@@ -42,7 +42,7 @@ class SurveyIntegrationTest < ActionDispatch::IntegrationTest
     
     assert_redirected_to lesson_path(@lesson, page_id: @page.id)
     follow_redirect!
-    assert_select "li", text: /Red:.*1.*votes.*\(100.0%\).*<- Your choice/
+    assert_select "div", text: /Red.*Your choice.*100.0%/
   end
 
   test "submitting again replaces multiple answers" do
@@ -85,7 +85,7 @@ class SurveyIntegrationTest < ActionDispatch::IntegrationTest
     follow_redirect!
     
     # Should see that they have answered
-    assert_select "li", text: /Red:.*1.*votes.*\(100.0%\).*<- Your choice/
-    assert_select "h3", "Survey"
+    assert_select "div", text: /Red.*Your choice.*100.0%/
+    assert_select "h3", "Knowledge Check"
   end
 end

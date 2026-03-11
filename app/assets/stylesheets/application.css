@@ -1,10 +1,240 @@
 /*
  * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
  */
+
+:root {
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --bg-color: #f9fafb;
+  --card-bg: #ffffff;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+  --sidebar-width: 280px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-outline {
+  border-color: var(--border-color);
+  color: var(--text-muted);
+  background-color: transparent;
+}
+
+.btn-outline:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-danger {
+  color: #ef4444;
+  background-color: transparent;
+}
+
+.btn-danger:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Layout for Lesson Show */
+.lesson-layout {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .lesson-layout {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    flex: 0 0 var(--sidebar-width);
+    position: sticky;
+    top: 2rem;
+    height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+
+  .main-content {
+    flex: 1;
+  }
+}
+
+/* Sidebar Styling */
+.sidebar-section {
+  margin-bottom: 2rem;
+}
+
+.sidebar-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.nav-item {
+  display: block;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+  transition: background-color 0.2s;
+  font-size: 0.9375rem;
+}
+
+.nav-item:hover {
+  background-color: #f3f4f6;
+}
+
+.nav-item.active {
+  background-color: #eff6ff;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Flash messages */
+.alert-box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.alert-success { background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+.alert-danger { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+/* Instructor Badge */
+.instructor-badge {
+  display: inline-block;
+  background-color: #fef9c3;
+  color: #854d0e;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid #fde047;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Grid for Index */
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* QR Code area */
+.qr-container {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px dashed var(--border-color);
+  margin-top: 1rem;
+}
+
+.qr-code svg {
+  max-width: 150px;
+  height: auto;
+}

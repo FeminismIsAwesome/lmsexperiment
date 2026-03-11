@@ -20,9 +20,9 @@ class SurveyAggregationTest < ActionDispatch::IntegrationTest
     get lesson_path(@lesson, page_id: @page.id)
     assert_response :success
     
-    assert_select "p", text: /Total respondents: 2/
-    assert_select "li", text: /Apple:.*2.*votes.*\(100.0%\)/
-    assert_select "li", text: /Banana:.*1.*votes.*\(50.0%\)/
+    assert_select "p", text: /Total respondents:.*2/
+    assert_select "div", text: /Apple.*100.0%/
+    assert_select "div", text: /Banana.*50.0%/
   end
 
   test "student view does not show aggregated data if they haven't voted" do
@@ -47,8 +47,8 @@ class SurveyAggregationTest < ActionDispatch::IntegrationTest
     
     assert_redirected_to student_show_lesson_url(@lesson, page_id: @page.id)
     follow_redirect!
-    assert_select "p", text: /Total respondents: 3/ # visitor1, visitor2, and current student
-    assert_select "li", text: /Banana:.*2.*votes.*\(66.7%\).*<- Your choice/
-    assert_select "li", text: /Apple:.*2.*votes.*\(66.7%\)/
+    assert_select "p", text: /Total respondents:.*3/ # visitor1, visitor2, and current student
+    assert_select "div", text: /Banana.*Your choice.*66.7%/
+    assert_select "div", text: /Apple.*66.7%/
   end
 end
