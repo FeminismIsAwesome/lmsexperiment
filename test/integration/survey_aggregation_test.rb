@@ -15,6 +15,7 @@ class SurveyAggregationTest < ActionDispatch::IntegrationTest
   end
 
   test "instructor view shows aggregated data even if they haven't voted" do
+    sign_in users(:one)
     # Instructor view (regular show)
     get lesson_path(@lesson, page_id: @page.id)
     assert_response :success
@@ -42,8 +43,9 @@ class SurveyAggregationTest < ActionDispatch::IntegrationTest
     post question_responses_path, params: { 
       question_id: @question.id, 
       question_option_ids: [@banana.id] 
-    }
+    }, headers: { "HTTP_REFERER" => student_show_lesson_path(@lesson, page_id: @page.id) }
     
+    assert_redirected_to student_show_lesson_url(@lesson, page_id: @page.id)
     follow_redirect!
     assert_select "p", text: /Total respondents: 3/ # visitor1, visitor2, and current student
     assert_select "li", text: /Banana:.*2.*votes.*\(66.7%\).*<- Your choice/

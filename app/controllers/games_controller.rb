@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_game, only: %i[ edit update destroy ]
 
   def new

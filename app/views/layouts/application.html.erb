@@ -24,6 +24,22 @@
   </head>
 
   <body>
+    <% if notice %>
+      <p class="notice" style="color: green;"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert" style="color: red;"><%= alert %></p>
+    <% end %>
+
+    <div style="margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #ccc;">
+      <% if user_signed_in? %>
+        Logged in as: <strong><%= current_user.email %></strong> |
+        <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete } %>
+      <% else %>
+        <%= link_to "Instructor Sign in", new_user_session_path %>
+      <% end %>
+    </div>
+
     <%= yield %>
   </body>
 </html>

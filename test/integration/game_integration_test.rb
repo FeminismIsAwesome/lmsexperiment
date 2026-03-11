@@ -3,6 +3,8 @@ require "test_helper"
 class GameIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = Lesson.create!(title: "Game Lesson")
+    @user = users(:one)
+    sign_in @user
   end
 
   test "can create a memory match game for a lesson" do
@@ -28,7 +30,8 @@ class GameIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "[data-memory-match-words-value='#{expected_attr}']"
   end
 
-  test "student can view and interact with the game" do
+  test "student can view and interact with the game even if not signed in" do
+    sign_out @user
     game = @lesson.games.create!(title: "Test Game", game_type: "memory_match")
     
     get student_show_lesson_path(@lesson, game_id: game.id)

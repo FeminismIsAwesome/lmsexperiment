@@ -2,6 +2,7 @@ require "test_helper"
 
 class QrCodeIntegrationTest < ActionDispatch::IntegrationTest
   test "instructor sees QR codes on lessons index and show" do
+    sign_in users(:one)
     lesson = lessons(:one)
     get lessons_path
     assert_response :success

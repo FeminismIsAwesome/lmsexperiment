@@ -66,3 +66,5 @@ group :test do
 end
 
 gem "rqrcode", "~> 3.2"
+
+gem "devise", "~> 5.0"

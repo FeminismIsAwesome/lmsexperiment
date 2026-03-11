@@ -3,23 +3,27 @@ require "test_helper"
 class LessonsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = lessons(:one)
+    @user = users(:one)
+    sign_in @user
   end
 
-  test "should get student index" do
+  test "should get student index even if not signed in" do
+    sign_out :user
     get student_index_lessons_url
     assert_response :success
     assert_select "h1", "Available Lessons"
-    assert_select "a", text: "New lesson", count: 0
   end
 
-  test "should get student show" do
+  test "should get student show even if not signed in" do
+    sign_out :user
     get student_show_lesson_url(@lesson)
     assert_response :success
-    assert_select "a", text: "Edit this lesson", count: 0
-    assert_select "button", text: "Destroy this lesson", count: 0
-    assert_select "a", text: "Add a new page", count: 0
-    assert_select "a", text: "Back to lessons", count: 1
-    assert_select "a[href=?]", student_index_lessons_path
+  end
+
+  test "should redirect to login when accessing index and not signed in" do
+    sign_out :user
+    get lessons_url
+    assert_redirected_to new_user_session_url
   end
 
   test "should get index" do

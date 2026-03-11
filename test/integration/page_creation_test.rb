@@ -3,6 +3,7 @@ require "test_helper"
 class PageCreationTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = Lesson.create!(title: "Creation Lesson")
+    sign_in users(:one)
   end
 
   test "should create page with survey questions and options" do

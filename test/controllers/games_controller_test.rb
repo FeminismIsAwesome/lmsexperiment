@@ -4,6 +4,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = Lesson.create!(title: "Test Lesson")
     @game = @lesson.games.create!(title: "Initial Game", game_type: "memory_match")
+    sign_in users(:one)
   end
 
   test "should get new" do

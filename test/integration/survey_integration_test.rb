@@ -15,6 +15,7 @@ class SurveyIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "can submit multiple answers for a multi-choice question" do
+    sign_in users(:one)
     assert_difference "QuestionResponse.count", 2 do
       post question_responses_path, params: { 
         question_id: @multi_choice_question.id, 
@@ -30,6 +31,7 @@ class SurveyIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "can submit single answer for a single-choice question" do
+    sign_in users(:one)
     red_option = @single_choice_question.question_options.find_by(text: "Red")
     assert_difference "QuestionResponse.count", 1 do
       post question_responses_path, params: { 
@@ -44,6 +46,7 @@ class SurveyIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "submitting again replaces multiple answers" do
+    sign_in users(:one)
     post question_responses_path, params: { 
       question_id: @multi_choice_question.id, 
       question_option_ids: [@apple.id] 

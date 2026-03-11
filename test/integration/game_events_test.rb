@@ -20,6 +20,7 @@ class GameEventsTest < ActionDispatch::IntegrationTest
   end
 
   test "aggregate data is visible to instructors but not students" do
+    sign_in users(:one)
     # Record some events
     Event.create!(game: @game, event_type: "start", session_hash: "visitor1")
     Event.create!(game: @game, event_type: "start", session_hash: "visitor2")

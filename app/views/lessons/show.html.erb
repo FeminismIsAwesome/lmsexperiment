@@ -4,6 +4,11 @@
 
 <div style="display: flex; gap: 20px;">
   <div class="sidebar" style="flex: 0 0 250px; border-right: 1px solid #ccc; padding-right: 20px;">
+    <% unless @is_student %>
+      <div style="background-color: #fff9c4; padding: 10px; margin-bottom: 20px; border: 1px solid #fbc02d; border-radius: 5px;">
+        <strong>Instructor Mode</strong>
+      </div>
+    <% end %>
     <h3>Pages</h3>
     <div class="tabs" style="display: flex; flex-direction: column; gap: 5px;">
       <h4>Pages</h4>

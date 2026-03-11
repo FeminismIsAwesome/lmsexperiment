@@ -4,6 +4,12 @@
 
 <h1><%= @is_student ? "Available Lessons" : "Lessons" %></h1>
 
+<% unless @is_student %>
+  <div style="background-color: #fff9c4; padding: 10px; margin-bottom: 20px; border: 1px solid #fbc02d; border-radius: 5px; display: inline-block;">
+    <strong>Instructor Mode</strong>
+  </div>
+<% end %>
+
 <div id="lessons">
   <% @lessons.each do |lesson| %>
     <%= render lesson %>
