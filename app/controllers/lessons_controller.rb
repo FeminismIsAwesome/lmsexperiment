@@ -17,14 +17,15 @@ class LessonsController < ApplicationController
 
   # PATCH /lessons/1/update_positions
   def update_positions
-    params[:positions].each do |item|
-      if item[:type] == "Page"
-        Page.find(item[:id]).update(position: item[:position])
-      elsif item[:type] == "Game"
-        Game.find(item[:id]).update(position: item[:position])
+    ApplicationRecord.transaction do
+      params[:positions].each do |item|
+        klass = item[:type].constantize
+        klass.where(id: item[:id]).update_all(position: item[:position])
       end
     end
     head :ok
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   # GET /lessons/student_index
