@@ -3,12 +3,17 @@
   <%= f.text_field :text, style: "display: block; width: 100%;" %>
 
   <div style="margin-top: 10px;">
+    <%= f.label :question_type, "Question Type" %>
+    <%= f.select :question_type, Question::TYPES.map { |t| [t.titleize, t] }, {}, style: "display: block; width: 100%;" %>
+  </div>
+
+  <div style="margin-top: 10px;">
     <%= f.check_box :multiple_answers %>
-    <%= f.label :multiple_answers, "Allow multiple answers (checkboxes)" %>
+    <%= f.label :multiple_answers, "Allow multiple answers (checkboxes) - for Multiple Choice only" %>
   </div>
 
   <div style="margin-left: 20px; margin-top: 10px;">
-    <h4>Options</h4>
+    <h4>Options (for Multiple Choice only)</h4>
     <div data-controller="nested-form">
       <template data-nested-form-target="template">
         <%= f.fields_for :question_options, QuestionOption.new, child_index: "NEW_RECORD" do |option_form| %>

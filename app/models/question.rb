@@ -5,6 +5,17 @@ class Question < ApplicationRecord
   validates :text, presence: true
   accepts_nested_attributes_for :question_options, allow_destroy: true, reject_if: :all_blank
 
+  TYPES = ["multiple_choice", "free_text"].freeze
+  validates :question_type, inclusion: { in: TYPES }
+
+  def multiple_choice?
+    question_type == "multiple_choice"
+  end
+
+  def free_text?
+    question_type == "free_text"
+  end
+
   def total_respondents
     question_responses.distinct.count(:session_hash)
   end

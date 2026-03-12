@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_12_004127) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_013531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -105,9 +105,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_004127) do
   end
 
   create_table "question_responses", force: :cascade do |t|
+    t.text "answer_text"
     t.datetime "created_at", null: false
     t.bigint "question_id", null: false
-    t.bigint "question_option_id", null: false
+    t.bigint "question_option_id"
     t.string "session_hash"
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_question_responses_on_question_id"
@@ -118,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_004127) do
     t.datetime "created_at", null: false
     t.boolean "multiple_answers", default: false, null: false
     t.bigint "page_id", null: false
+    t.string "question_type", default: "multiple_choice", null: false
     t.string "text"
     t.datetime "updated_at", null: false
     t.index ["page_id"], name: "index_questions_on_page_id"

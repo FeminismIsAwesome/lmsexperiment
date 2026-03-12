@@ -11,51 +11,76 @@
           <p style="font-weight: 600; margin-bottom: 1rem; font-size: 1.125rem;"><%= question.text %></p>
 
           <% user_responses = question.question_responses.where(session_hash: session_hash) %>
+          <% show_results = user_responses.any? || !@is_student %>
 
-          <% if user_responses.any? || !@is_student %>
+          <% if show_results %>
             <div style="background-color: white; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 1.25rem;">
-              <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
-                Total respondents: <strong><%= question.total_respondents %></strong>
-              </p>
-              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <% question.question_options.each do |option| %>
-                  <% has_voted = user_responses.exists?(question_option: option) %>
-                  <% percentage = question.response_percentage(option) %>
-                  <% border_color = has_voted ? 'var(--primary-color)' : '#f1f5f9' %>
-                  <% bg_color = has_voted ? '#eff6ff' : 'transparent' %>
-                  <% outer_style = "position: relative; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #{border_color}; background-color: #{bg_color};" %>
-                  <div style="<%= outer_style %>">
-                    <div style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1;">
-                      <span style="font-size: 0.9375rem; <%= has_voted ? 'font-weight: 600;' : '' %>">
-                        <%= option.text %>
-                        <% if has_voted %>
-                          <span style="margin-left: 0.5rem; color: var(--primary-color); font-size: 0.75rem;">(Your choice)</span>
-                        <% end %>
-                      </span>
-                      <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">
-                        <%= percentage %>%
-                      </span>
+              <% if question.free_text? %>
+                <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
+                  Total responses: <strong><%= question.total_respondents %></strong>
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                  <% if !@is_student %>
+                    <% question.question_responses.each do |resp| %>
+                      <div style="padding: 0.75rem; border: 1px solid #f1f5f9; border-radius: 0.375rem; background-color: #f8fafc;">
+                        <p style="font-size: 0.9375rem; margin-bottom: 0;"><%= resp.answer_text %></p>
+                      </div>
+                    <% end %>
+                  <% else %>
+                    <div style="padding: 0.75rem; border: 1px solid var(--primary-color); border-radius: 0.375rem; background-color: #eff6ff;">
+                      <p style="font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.25rem;">Your answer:</p>
+                      <p style="font-size: 0.9375rem; margin-bottom: 0;"><%= user_responses.first.answer_text %></p>
                     </div>
-                    <% width_style = "width: #{percentage}%;" %>
-                    <% bar_style = "position: absolute; top: 0; left: 0; height: 100%; background-color: #f1f5f9; #{width_style} opacity: 0.3; border-radius: 0.375rem;" %>
-                    <div style="<%= bar_style %>"></div>
-                  </div>
-                <% end %>
-              </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem;">
+                  Total respondents: <strong><%= question.total_respondents %></strong>
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                  <% question.question_options.each do |option| %>
+                    <% has_voted = user_responses.exists?(question_option: option) %>
+                    <% percentage = question.response_percentage(option) %>
+                    <% border_color = has_voted ? 'var(--primary-color)' : '#f1f5f9' %>
+                    <% bg_color = has_voted ? '#eff6ff' : 'transparent' %>
+                    <% outer_style = "position: relative; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #{border_color}; background-color: #{bg_color};" %>
+                    <div style="<%= outer_style %>">
+                      <div style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1;">
+                        <span style="font-size: 0.9375rem; <%= has_voted ? 'font-weight: 600;' : '' %>">
+                          <%= option.text %>
+                          <% if has_voted %>
+                            <span style="margin-left: 0.5rem; color: var(--primary-color); font-size: 0.75rem;">(Your choice)</span>
+                          <% end %>
+                        </span>
+                        <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">
+                          <%= percentage %>%
+                        </span>
+                      </div>
+                      <% width_style = "width: #{percentage}%;" %>
+                      <% bar_style = "position: absolute; top: 0; left: 0; height: 100%; background-color: #f1f5f9; #{width_style} opacity: 0.3; border-radius: 0.375rem;" %>
+                      <div style="<%= bar_style %>"></div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           <% else %>
             <%= form_with url: question_responses_path, method: :post do |f| %>
               <%= f.hidden_field :question_id, value: question.id %>
               <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
-                <% question.question_options.each do |option| %>
-                  <label class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 1rem; border-color: #e2e8f0;">
-                    <% if question.multiple_answers %>
-                      <%= f.check_box "question_option_ids[]", { id: "option_#{option.id}", style: "margin-right: 0.75rem;" }, option.id, nil %>
-                    <% else %>
-                      <%= f.radio_button :question_option_id, option.id, id: "option_#{option.id}", style: "margin-right: 0.75rem;" %>
-                    <% end %>
-                    <span style="font-weight: 400;"><%= option.text %></span>
-                  </label>
+                <% if question.free_text? %>
+                  <%= f.text_area :answer_text, placeholder: "Type your answer here...", class: "form-control", style: "width: 100%; min-height: 100px; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #e2e8f0;", required: true %>
+                <% else %>
+                  <% question.question_options.each do |option| %>
+                    <label class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 1rem; border-color: #e2e8f0;">
+                      <% if question.multiple_answers %>
+                        <%= f.check_box "question_option_ids[]", { id: "option_#{option.id}", style: "margin-right: 0.75rem;" }, option.id, nil %>
+                      <% else %>
+                        <%= f.radio_button :question_option_id, option.id, id: "option_#{option.id}", style: "margin-right: 0.75rem;" %>
+                      <% end %>
+                      <span style="font-weight: 400;"><%= option.text %></span>
+                    </label>
+                  <% end %>
                 <% end %>
               </div>
               <%= f.submit "Submit Answer", class: "btn btn-primary", style: "width: 100%;" %>
