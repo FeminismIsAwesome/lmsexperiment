@@ -19,7 +19,7 @@
         <button type="button" class="btn btn-outline" data-action="click->memory-match#reset">Reset Game</button>
       </div>
     </div>
-  <% elsif game.game_type == "categorize" %>
+  <% elsif game.game_type == "categorize" || game.game_type == "emotions" %>
     <div data-controller="categorize"
          data-categorize-options-value='<%= game.categorize_options.to_json %>'
          data-categorize-game-id-value="<%= game.id %>"
@@ -40,15 +40,15 @@
           <!-- Current item will be injected here -->
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
           <% (game.categorize_options["categories"] || []).each do |category| %>
             <div class="card category-card" 
-                 style="padding: 1.5rem; text-align: center; cursor: pointer; transition: transform 0.1s, background-color 0.2s; background-color: white;"
+                 style="padding: 1rem; text-align: center; cursor: pointer; transition: transform 0.1s, background-color 0.2s; background-color: white;"
                  data-action="click->categorize#selectCategory"
                  data-category-id="<%= category["id"] %>"
                  onmouseover="this.style.backgroundColor='#f1f5f9'; this.style.transform='scale(1.02)'"
                  onmouseout="if (this.style.backgroundColor !== 'rgb(220, 252, 231)' && this.style.backgroundColor !== 'rgb(254, 226, 226)') { this.style.backgroundColor='white'; } this.style.transform='scale(1)'">
-              <h3 style="margin: 0; font-size: 1.125rem;"><%= category["name"] %></h3>
+              <h3 style="margin: 0; font-size: 1rem;"><%= category["name"] %></h3>
             </div>
           <% end %>
         </div>
@@ -64,7 +64,11 @@
     <% unless @is_student %>
       <div class="card" style="background-color: #f1f5f9; border-style: dashed; margin-bottom: 2rem;">
         <h3 style="margin-top: 0; font-size: 1rem; margin-bottom: 1rem;">Instructor Analytics</h3>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center;">
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #4b5563;"><%= game.unique_visits %></div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Visits</div>
+          </div>
           <div>
             <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);"><%= game.unique_starts %></div>
             <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Starts</div>
@@ -75,7 +79,7 @@
           </div>
           <div>
             <div style="font-size: 1.5rem; font-weight: 700; color: #d97706;"><%= game.unique_engagements %></div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Deep Engagement</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Engagement</div>
           </div>
         </div>
       </div>

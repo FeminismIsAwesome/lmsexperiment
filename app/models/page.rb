@@ -10,6 +10,9 @@ class Page < ApplicationRecord
   validates :title, presence: true
   validates :content, presence: true, if: -> { page_translations.empty? }
 
+  def unique_visits
+    page_views.distinct.count(:session_hash)
+  end
   def translated_title(locale = I18n.locale)
     page_translations.find_by(locale: locale.to_s)&.title || title
   end

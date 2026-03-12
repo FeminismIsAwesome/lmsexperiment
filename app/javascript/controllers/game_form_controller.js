@@ -16,7 +16,7 @@ export default class extends Controller {
       this.memoryMatchTarget.style.display = type === "memory_match" ? "block" : "none"
     }
     if (this.hasCategorizeTarget) {
-      this.categorizeTarget.style.display = type === "categorize" ? "block" : "none"
+      this.categorizeTarget.style.display = (type === "categorize" || type === "emotions") ? "block" : "none"
     }
   }
 }

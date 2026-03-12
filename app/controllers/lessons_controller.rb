@@ -121,10 +121,15 @@ class LessonsController < ApplicationController
       end
       
       record_page_view(@current_page) if @current_page
+      record_game_visit(@current_game) if @current_game
     end
 
     def record_page_view(page)
       PageView.find_or_create_by!(page: page, session_hash: session_hash)
+    end
+
+    def record_game_visit(game)
+      Event.find_or_create_by!(game: game, event_type: "visit", session_hash: session_hash)
     end
 
     # Only allow a list of trusted parameters through.

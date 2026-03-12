@@ -22,6 +22,23 @@ class Game < ApplicationRecord
     "points_per_item" => 1
   }.freeze
 
+  EMOTIONS_CATEGORIES = {
+    "categories" => [
+      { "name" => "Happy", "id" => "happy" },
+      { "name" => "Sad", "id" => "sad" },
+      { "name" => "Angry", "id" => "angry" },
+      { "name" => "Surprised", "id" => "surprised" }
+    ],
+    "items" => [
+      { "name" => "Winning a prize", "category" => "happy", "image" => "https://images.unsplash.com/photo-1513297887119-d46091b24bfa?w=200" },
+      { "name" => "Losing a toy", "category" => "sad", "image" => "https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?w=200" },
+      { "name" => "Being treated unfairly", "category" => "angry", "image" => "https://images.unsplash.com/photo-1589182397057-b1617b71ad9a?w=200" },
+      { "name" => "Unexpected party", "category" => "surprised", "image" => "https://images.unsplash.com/photo-1530103043960-ef38714abb15?w=200" }
+    ],
+    "time_limit" => 30,
+    "points_per_item" => 1
+  }.freeze
+
   def memory_match_words
     return DEFAULT_WORDS if options.blank? || options["words"].blank?
     
@@ -31,18 +48,23 @@ class Game < ApplicationRecord
   end
 
   def categorize_options
-    return DEFAULT_CATEGORIES if options.blank?
+    base_defaults = game_type == "emotions" ? EMOTIONS_CATEGORIES : DEFAULT_CATEGORIES
+    return base_defaults if options.blank?
     
     # Ensure categories and items are present, otherwise merge with defaults
-    merged = DEFAULT_CATEGORIES.merge(options)
-    merged["categories"] = DEFAULT_CATEGORIES["categories"] if merged["categories"].blank?
-    merged["items"] = DEFAULT_CATEGORIES["items"] if merged["items"].blank?
+    merged = base_defaults.merge(options)
+    merged["categories"] = base_defaults["categories"] if merged["categories"].blank?
+    merged["items"] = base_defaults["items"] if merged["items"].blank?
     
     # Ensure numeric values are integers
     merged["time_limit"] = merged["time_limit"].to_i if merged["time_limit"].present?
     merged["points_per_item"] = merged["points_per_item"].to_i if merged["points_per_item"].present?
     
     merged
+  end
+
+  def unique_visits
+    events.where(event_type: "visit").distinct.count(:session_hash)
   end
 
   def unique_starts

@@ -107,4 +107,17 @@ Game.find_or_create_by!(lesson: lesson4, title: "Fruit and Vegetable Sort") do |
   g.position = 2
 end
 
+# Create a lesson with the new emotions game
+emotions_lesson = Lesson.find_or_create_by!(title: "Understanding Emotions") do |l|
+  l.description = "Learn to identify different human emotions through text and images."
+end
+
+Game.find_or_create_by!(lesson: emotions_lesson, game_type: "emotions") do |g|
+  g.title = "Emotion Identification"
+  g.options = {
+    time_limit: 45,
+    points_per_item: 2
+  }
+end
+
 puts "Seed data successfully loaded!"

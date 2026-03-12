@@ -23,7 +23,7 @@
   <div data-controller="game-form">
     <div id="game_type_select">
       <%= form.label :game_type, style: "display: block" %>
-      <%= form.select :game_type, [["Memory Match", "memory_match"], ["Categorize", "categorize"]], {}, { 
+      <%= form.select :game_type, [["Memory Match", "memory_match"], ["Categorize", "categorize"], ["Emotions", "emotions"]], {}, { 
             data: { action: "change->game-form#toggleFields" }
           } %>
     </div>

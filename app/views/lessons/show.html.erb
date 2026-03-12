@@ -62,9 +62,22 @@
 
       <% if @current_page %>
         <h1 style="margin-top: 0; margin-bottom: 2rem; font-size: 2rem;"><%= @current_page.translated_title(I18n.locale) %></h1>
+        <% unless @is_student %>
+          <div class="stats-badge" style="background: #f1f5f9; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem; display: flex; gap: 1.5rem;">
+            <span><strong>Unique Visits:</strong> <%= @current_page.unique_visits %></span>
+          </div>
+        <% end %>
         <%= render @current_page %>
       <% elsif @current_game %>
         <h1 style="margin-top: 0; margin-bottom: 2rem; font-size: 2rem;"><%= @current_game.title %></h1>
+        <% unless @is_student %>
+          <div class="stats-badge" style="background: #f1f5f9; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem; display: flex; gap: 1.5rem;">
+            <span><strong>Visits:</strong> <%= @current_game.unique_visits %></span>
+            <span><strong>Starts:</strong> <%= @current_game.unique_starts %></span>
+            <span><strong>Engaged:</strong> <%= @current_game.unique_engagements %></span>
+            <span><strong>Completed:</strong> <%= @current_game.unique_completions %></span>
+          </div>
+        <% end %>
         <%= render @current_game %>
       <% else %>
         <div style="text-align: center; color: var(--text-muted); padding-top: 4rem;">
