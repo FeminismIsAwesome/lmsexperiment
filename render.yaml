@@ -7,9 +7,9 @@ databases:
 services:
   - type: web
     name: lms-spike
-    env: ruby
+    runtime: ruby
     buildCommand: ./bin/render-build.sh
-    startCommand: bundle exec puma -C config/puma.rb
+    startCommand: ./bin/thrust ./bin/rails server -p 10000
     envVars:
       - key: DATABASE_URL
         fromDatabase:
