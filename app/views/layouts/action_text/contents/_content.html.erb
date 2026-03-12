@@ -1,3 +1,10 @@
 <div class="trix-content">
-  <%= yield -%>
+  <% content = yield %>
+  <%# Handle iframes that might have been escaped when pasted as text into Trix %>
+  <%# We look for &lt;iframe...&gt;...&lt;/iframe&gt; and unescape them so they become real tags %>
+  <%# Then we wrap all iframes in video-container for responsiveness %>
+  <% processed_content = content.gsub(/&lt;iframe.*?&lt;\/iframe&gt;/m) { |match| CGI.unescapeHTML(match) } %>
+  <%= processed_content.gsub(/<iframe[^>]*>.*?<\/iframe>/m) { |match| 
+    match.include?("video-container") ? match : "<div class='video-container'>#{match}</div>" 
+  }.html_safe %>
 </div>
