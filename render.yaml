@@ -9,7 +9,7 @@ services:
     name: lms-spike
     runtime: ruby
     buildCommand: ./bin/render-build.sh
-    startCommand: ./bin/thrust ./bin/rails server -p 10000
+    startCommand: bundle exec rails db:migrate && ./bin/thrust ./bin/rails server -p 10000
     envVars:
       - key: DATABASE_URL
         fromDatabase:
