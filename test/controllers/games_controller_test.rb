@@ -20,6 +20,26 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to lesson_url(@lesson, game_id: Game.last.id)
   end
 
+  test "should create categorize game" do
+    assert_difference("Game.count") do
+      post games_url, params: { 
+        game: { 
+          game_type: "categorize", 
+          lesson_id: @lesson.id, 
+          title: "Fruit Sort",
+          options: { time_limit: 45, points_per_item: 2 }
+        } 
+      }
+    end
+
+    assert_redirected_to lesson_url(@lesson, game_id: Game.last.id)
+    assert_equal 45, Game.last.options["time_limit"].to_i
+
+    # This is where the error should manifest: rendering the lesson with the new game
+    get lesson_url(@lesson, game_id: Game.last.id)
+    assert_response :success
+  end
+
   test "should get edit" do
     get edit_game_url(@game)
     assert_response :success

@@ -91,4 +91,20 @@ end
 
 p4.save!
 
+# Lesson 4: Healthy Eating
+puts "Creating Healthy Eating Lesson..."
+lesson4 = Lesson.find_or_create_by!(title: "Healthy Eating")
+
+# Page 1: Nutrition Basics
+p5 = Page.find_or_initialize_by(lesson: lesson4, title: "Nutrition Basics")
+p5.content = "<div>Understanding the difference between fruits and vegetables is a fundamental part of nutrition. Let's practice!</div>"
+p5.position = 1
+p5.save!
+
+# Add Categorize Game to Lesson 4
+Game.find_or_create_by!(lesson: lesson4, title: "Fruit and Vegetable Sort") do |g|
+  g.game_type = "categorize"
+  g.position = 2
+end
+
 puts "Seed data successfully loaded!"
