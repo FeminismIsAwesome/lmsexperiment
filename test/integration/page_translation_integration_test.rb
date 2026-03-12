@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PageTranslationTest < ActionDispatch::IntegrationTest
+class PageTranslationIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = Lesson.create!(title: "Translation Lesson")
     @user = users(:one)

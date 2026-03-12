@@ -38,19 +38,72 @@
     </div>
 
     <div id="categorize_fields" data-game-form-target="categorize" style="display: none;">
-      <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">
-        The Categorize game defaults to Fruits and Veggies. 
-        Advanced configuration will be added in a future update.
-      </p>
-      
       <%= form.fields_for :options, OpenStruct.new(game.options || {}) do |options_form| %>
-        <div>
+        <div style="margin-bottom: 1rem;">
           <%= options_form.label :time_limit, "Time Limit (seconds)", style: "display: block" %>
           <%= options_form.number_field :time_limit, value: (game.options&.fetch("time_limit", nil) || 30) %>
         </div>
-        <div>
+        <div style="margin-bottom: 1rem;">
           <%= options_form.label :points_per_item, "Points Per Item", style: "display: block" %>
           <%= options_form.number_field :points_per_item, value: (game.options&.fetch("points_per_item", nil) || 1) %>
+        </div>
+
+        <div id="custom_items" data-controller="nested-form">
+          <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Custom Items</h4>
+          <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">
+            Add custom items below. If left empty, defaults will be used.
+            Categories: <strong>fruits</strong>, <strong>veggies</strong> (for Categorize) or 
+            <strong>happy</strong>, <strong>sad</strong>, <strong>angry</strong>, <strong>surprised</strong> (for Emotions).
+          </p>
+
+          <div data-nested-form-target="target">
+            <% (game.options&.fetch("items", []) || []).each_with_index do |item, index| %>
+              <div class="nested-fields" data-new-record="false" style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px;">
+                <%= options_form.fields_for "items", OpenStruct.new(item), index: index do |item_form| %>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                      <%= item_form.label :name, style: "display: block" %>
+                      <%= item_form.text_field :name, value: item["name"] %>
+                    </div>
+                    <div>
+                      <%= item_form.label :category, style: "display: block" %>
+                      <%= item_form.text_field :category, value: item["category"] %>
+                    </div>
+                  </div>
+                  <div style="margin-top: 10px;">
+                    <%= item_form.label :image, "Image URL", style: "display: block" %>
+                    <%= item_form.text_field :image, value: item["image"], style: "width: 100%;" %>
+                  </div>
+                  <%= item_form.hidden_field :_destroy, value: item["_destroy"] %>
+                  <button type="button" data-action="nested-form#remove" style="margin-top: 10px; color: red;">Remove</button>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+          <button type="button" data-action="nested-form#add" style="margin-top: 10px; background: #eee; padding: 5px 10px; border-radius: 4px;">Add Item</button>
+
+          <template data-nested-form-target="template">
+            <div class="nested-fields" data-new-record="true" style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px;">
+              <%= options_form.fields_for "items", OpenStruct.new, index: "NEW_RECORD" do |item_form| %>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <%= item_form.label :name, style: "display: block" %>
+                    <%= item_form.text_field :name %>
+                  </div>
+                  <div>
+                    <%= item_form.label :category, style: "display: block" %>
+                    <%= item_form.text_field :category %>
+                  </div>
+                </div>
+                <div style="margin-top: 10px;">
+                  <%= item_form.label :image, "Image URL", style: "display: block" %>
+                  <%= item_form.text_field :image, style: "width: 100%;" %>
+                </div>
+                <button type="button" data-action="nested-form#remove" style="margin-top: 10px; color: red;">Remove</button>
+              <% end %>
+            </div>
+          </template>
         </div>
       <% end %>
     </div>

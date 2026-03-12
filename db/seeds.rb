@@ -102,15 +102,24 @@ p5.position = 1
 p5.save!
 
 # Add Categorize Game to Lesson 4
-Game.find_or_create_by!(lesson: lesson4, title: "Fruit and Vegetable Sort") do |g|
+Game.find_or_initialize_by(lesson: lesson4, title: "Fruit and Vegetable Sort").tap do |g|
   g.game_type = "categorize"
   g.position = 2
+  g.options = {
+    items: [
+      { "name" => "Kiwi", "category" => "fruits", "image" => "https://images.unsplash.com/photo-1585059895822-7481545e7e9e?w=200" },
+      { "name" => "Strawberry", "category" => "fruits", "image" => "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=200" },
+      { "name" => "Cucumber", "category" => "veggies", "image" => "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?w=200" },
+      { "name" => "Tomato", "category" => "veggies", "image" => "https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?w=200" }
+    ],
+    time_limit: 45,
+    points_per_item: 5
+  }
+  g.save!
 end
 
 # Create a lesson with the new emotions game
-emotions_lesson = Lesson.find_or_create_by!(title: "Understanding Emotions") do |l|
-  l.description = "Learn to identify different human emotions through text and images."
-end
+emotions_lesson = Lesson.find_or_create_by!(title: "Understanding Emotions")
 
 Game.find_or_create_by!(lesson: emotions_lesson, game_type: "emotions") do |g|
   g.title = "Emotion Identification"

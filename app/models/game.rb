@@ -54,6 +54,15 @@ class Game < ApplicationRecord
     # Ensure categories and items are present, otherwise merge with defaults
     merged = base_defaults.merge(options)
     merged["categories"] = base_defaults["categories"] if merged["categories"].blank?
+    
+    # Filter out items marked for destruction
+    if options["items"].is_a?(Array)
+      merged["items"] = options["items"].reject { |i| i["_destroy"] == "1" || i["_destroy"] == true }
+    elsif options["items"].is_a?(Hash)
+      # Handle cases where items come as a hash (common with nested attributes in forms)
+      merged["items"] = options["items"].values.reject { |i| i["_destroy"] == "1" || i["_destroy"] == true }
+    end
+
     merged["items"] = base_defaults["items"] if merged["items"].blank?
     
     # Ensure numeric values are integers
