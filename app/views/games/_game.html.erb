@@ -1,7 +1,7 @@
 <div id="<%= dom_id game %>">
   <% if game.game_type == "memory_match" %>
     <div data-controller="memory-match" 
-         data-memory-match-words-value='["Honest", "trust", "equality", "boundaries", "communication", "respect"]'
+         data-memory-match-words-value='<%= game.memory_match_words.to_json %>'
          data-memory-match-game-id-value="<%= game.id %>"
          class="game-container">
       

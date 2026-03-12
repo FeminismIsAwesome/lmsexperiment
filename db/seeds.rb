@@ -60,6 +60,7 @@ p3.save!
 # Add the Memory Match Game to Lesson 2
 Game.find_or_create_by!(lesson: lesson2, title: "Social Wellbeing - The Principle of Relationship Game") do |g|
   g.game_type = "memory_match"
+  g.position = 2
 end
 
 puts "Seed data successfully loaded!"

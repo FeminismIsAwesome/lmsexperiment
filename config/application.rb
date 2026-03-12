@@ -14,6 +14,8 @@ require "action_view/railtie"
 # require "action_cable/engine" # Remove Action Cable
 require "rails/test_unit/railtie"
 
+require "ostruct"
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

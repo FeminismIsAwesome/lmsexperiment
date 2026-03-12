@@ -25,6 +25,18 @@
     <%= form.select :game_type, [["Memory Match", "memory_match"]] %>
   </div>
 
+  <div>
+    <%= form.label :position, style: "display: block" %>
+    <%= form.number_field :position %>
+  </div>
+
+  <%= form.fields_for :options, OpenStruct.new(game.options || {}) do |options_form| %>
+    <div>
+      <%= options_form.label :words, "Memory Match Words (comma separated)", style: "display: block" %>
+      <%= options_form.text_field :words, value: (game.options&.fetch("words", nil) || Game::DEFAULT_WORDS.join(", ")) %>
+    </div>
+  <% end %>
+
   <div style="margin-top: 10px;">
     <%= form.submit %>
   </div>

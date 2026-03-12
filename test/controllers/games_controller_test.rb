@@ -3,7 +3,7 @@ require "test_helper"
 class GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = Lesson.create!(title: "Test Lesson")
-    @game = @lesson.games.create!(title: "Initial Game", game_type: "memory_match")
+    @game = @lesson.games.create!(title: "Initial Game", game_type: "memory_match", position: 1)
     sign_in users(:one)
   end
 
@@ -14,7 +14,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create game" do
     assert_difference("Game.count") do
-      post games_url, params: { game: { game_type: "memory_match", lesson_id: @lesson.id, title: "New Game" } }
+      post games_url, params: { game: { game_type: "memory_match", lesson_id: @lesson.id, title: "New Game", position: 1 } }
     end
 
     assert_redirected_to lesson_url(@lesson, game_id: Game.last.id)

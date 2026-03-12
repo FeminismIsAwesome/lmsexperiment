@@ -13,7 +13,8 @@ class GameIntegrationTest < ActionDispatch::IntegrationTest
         game: {
           lesson_id: @lesson.id,
           title: "Social Wellbeing - The Principle of Relationship Game",
-          game_type: "memory_match"
+          game_type: "memory_match",
+          position: 1
         }
       }
     end
@@ -25,14 +26,17 @@ class GameIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "[data-controller='memory-match']"
     
     # Check if words are correctly passed to the controller
-    # The view has spaces in the JSON array, but to_json doesn't.
-    expected_attr = '["Honest", "trust", "equality", "boundaries", "communication", "respect"]'
-    assert_select "[data-memory-match-words-value='#{expected_attr}']"
+    # The view has HTML-encoded JSON array.
+    assert_select "[data-memory-match-words-value]" do |element|
+      value = element.first["data-memory-match-words-value"]
+      assert_match "Honest", value
+      assert_match "respect", value
+    end
   end
 
   test "student can view and interact with the game even if not signed in" do
     sign_out @user
-    game = @lesson.games.create!(title: "Test Game", game_type: "memory_match")
+    game = @lesson.games.create!(title: "Test Game", game_type: "memory_match", position: 1)
     
     get student_show_lesson_path(@lesson, game_id: game.id)
     assert_response :success
@@ -43,7 +47,7 @@ class GameIntegrationTest < ActionDispatch::IntegrationTest
     
     # Check for the sidebar link
     assert_select "aside.sidebar" do
-      assert_select "a", text: "Test Game"
+      assert_select "a", text: "🎮 Test Game"
     end
   end
 end

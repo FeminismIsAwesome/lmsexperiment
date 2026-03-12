@@ -84,7 +84,10 @@ class LessonsController < ApplicationController
 
     def prepare_lesson_view
       @pages = @lesson.pages.order(:position)
-      @games = @lesson.games.order(:created_at)
+      @games = @lesson.games.order(:position)
+      
+      # Combined items for the sidebar
+      @sidebar_items = (@pages.to_a + @games.to_a).sort_by(&:position)
       
       if params[:game_id]
         @current_game = @games.find(params[:game_id])

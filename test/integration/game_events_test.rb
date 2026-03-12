@@ -3,7 +3,7 @@ require "test_helper"
 class GameEventsTest < ActionDispatch::IntegrationTest
   setup do
     @lesson = Lesson.create!(title: "Event Lesson")
-    @game = Game.create!(lesson: @lesson, title: "Memory Match", game_type: "memory_match")
+    @game = Game.create!(lesson: @lesson, title: "Memory Match", game_type: "memory_match", position: 1)
   end
 
   test "can record game events" do

@@ -4,8 +4,10 @@ one:
   lesson: one
   title: MyString
   game_type: MyString
+  position: 1
 
 two:
   lesson: two
   title: MyString
   game_type: MyString
+  position: 1
