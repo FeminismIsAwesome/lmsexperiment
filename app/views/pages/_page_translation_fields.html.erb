@@ -1,0 +1,21 @@
+<div class="nested-fields" data-new-record="<%= f.object.new_record? %>" style="margin-bottom: 20px; border: 1px dashed #ccc; padding: 10px;">
+  <div>
+    <%= f.label :locale, "Locale (e.g., en, es, fr)", style: "display: block" %>
+    <%= f.text_field :locale, placeholder: "en", style: "width: 100%" %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= f.label :title, "Translated Title", style: "display: block" %>
+    <%= f.text_field :title, style: "width: 100%" %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= f.label :content, "Translated Content", style: "display: block" %>
+    <%= f.rich_textarea :content %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= f.hidden_field :_destroy %>
+    <button type="button" data-action="click->nested-form#remove" class="btn btn-danger" style="font-size: 0.75rem;">Remove Translation</button>
+  </div>
+</div>

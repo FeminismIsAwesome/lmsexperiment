@@ -6,8 +6,13 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   helper_method :session_hash
+  before_action :set_locale
 
   private
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
 
   def session_hash
     session[:visitor_id] ||= SecureRandom.hex(16)

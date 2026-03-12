@@ -14,11 +14,11 @@
         <% @sidebar_items.each do |item| %>
           <% if item.is_a?(Page) %>
             <% active = (@current_page == item) %>
-            <% path = @is_student ? student_show_lesson_path(@lesson, page_id: item.id) : lesson_path(@lesson, page_id: item.id) %>
-            <%= link_to item.title, path, class: "nav-item #{'active' if active}" %>
+            <% path = @is_student ? student_show_lesson_path(@lesson, page_id: item.id, locale: params[:locale]) : lesson_path(@lesson, page_id: item.id, locale: params[:locale]) %>
+            <%= link_to item.translated_title(I18n.locale), path, class: "nav-item #{'active' if active}" %>
           <% elsif item.is_a?(Game) %>
             <% active = (@current_game == item) %>
-            <% path = @is_student ? student_show_lesson_path(@lesson, game_id: item.id) : lesson_path(@lesson, game_id: item.id) %>
+            <% path = @is_student ? student_show_lesson_path(@lesson, game_id: item.id, locale: params[:locale]) : lesson_path(@lesson, game_id: item.id, locale: params[:locale]) %>
             <%= link_to "🎮 #{item.title}", path, class: "nav-item #{'active' if active}" %>
           <% end %>
         <% end %>
@@ -32,6 +32,7 @@
         <% else %>
           <%= link_to "Add a new page", new_page_path(lesson_id: @lesson.id), class: "btn btn-outline", style: "margin-bottom: 0.5rem;" %>
           <%= link_to "Add a new game", new_game_path(lesson_id: @lesson.id), class: "btn btn-outline", style: "margin-bottom: 0.5rem;" %>
+          <%= link_to "Rearrange items", reorder_lesson_path(@lesson), class: "btn btn-outline", style: "margin-bottom: 0.5rem;" %>
           <%= link_to "Edit lesson title", edit_lesson_path(@lesson), class: "nav-link", style: "font-size: 0.875rem;" %>
           <%= link_to "Back to overview", lessons_path, class: "nav-link", style: "font-size: 0.875rem;" %>
           
@@ -52,8 +53,15 @@
 
   <main class="main-content">
     <div class="card" style="padding: 2.5rem; min-height: 60vh;">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; gap: 0.5rem;">
+        <% ["en", "es", "fr"].each do |locale| %>
+          <% path = @is_student ? student_show_lesson_path(@lesson, page_id: params[:page_id], game_id: params[:game_id], locale: locale) : lesson_path(@lesson, page_id: params[:page_id], game_id: params[:game_id], locale: locale) %>
+          <%= link_to locale.upcase, path, class: "btn #{I18n.locale.to_s == locale ? 'btn-primary' : 'btn-outline'}", style: "padding: 0.25rem 0.5rem; font-size: 0.75rem;" %>
+        <% end %>
+      </div>
+
       <% if @current_page %>
-        <h1 style="margin-top: 0; margin-bottom: 2rem; font-size: 2rem;"><%= @current_page.title %></h1>
+        <h1 style="margin-top: 0; margin-bottom: 2rem; font-size: 2rem;"><%= @current_page.translated_title(I18n.locale) %></h1>
         <%= render @current_page %>
       <% elsif @current_game %>
         <h1 style="margin-top: 0; margin-bottom: 2rem; font-size: 2rem;"><%= @current_game.title %></h1>

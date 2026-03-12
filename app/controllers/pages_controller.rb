@@ -75,6 +75,7 @@ class PagesController < ApplicationController
 
     def page_params
       params.require(:page).permit(:lesson_id, :title, :content, :position,
+        page_translations_attributes: [:id, :locale, :title, :content, :_destroy],
         questions_attributes: [:id, :text, :multiple_answers, :question_type, :_destroy,
           question_options_attributes: [:id, :text, :_destroy]]
       )

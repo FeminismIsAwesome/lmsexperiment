@@ -25,10 +25,6 @@
     <%= form.select :game_type, [["Memory Match", "memory_match"]] %>
   </div>
 
-  <div>
-    <%= form.label :position, style: "display: block" %>
-    <%= form.number_field :position %>
-  </div>
 
   <%= form.fields_for :options, OpenStruct.new(game.options || {}) do |options_form| %>
     <div>

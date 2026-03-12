@@ -30,10 +30,25 @@
     </p>
   </div>
 
-  <div>
-    <%= form.label :position, style: "display: block" %>
-    <%= form.number_field :position %>
+
+  <div style="margin-top: 20px; border: 1px solid #ddd; padding: 10px;" data-controller="nested-form">
+    <h3>Translations</h3>
+    
+    <template data-nested-form-target="template">
+      <%= form.fields_for :page_translations, PageTranslation.new, child_index: "NEW_RECORD" do |translation_form| %>
+        <%= render "pages/page_translation_fields", f: translation_form %>
+      <% end %>
+    </template>
+
+    <div data-nested-form-target="target">
+      <%= form.fields_for :page_translations do |translation_form| %>
+        <%= render "pages/page_translation_fields", f: translation_form %>
+      <% end %>
+    </div>
+
+    <button type="button" data-action="nested-form#add">Add Translation</button>
   </div>
+
 
   <div style="margin-top: 20px; border: 1px solid #ddd; padding: 10px;" data-controller="nested-form">
     <h3>Survey Questions</h3>

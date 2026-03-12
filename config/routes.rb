@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     end
     member do
       get :student_show
+      get :reorder
+      patch :update_positions
     end
   end
   resources :events, only: [:create]

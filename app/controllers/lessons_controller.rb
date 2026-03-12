@@ -1,11 +1,30 @@
 class LessonsController < ApplicationController
   before_action :authenticate_user!, except: %i[ student_index student_show ]
-  before_action :set_lesson, only: %i[ show edit update destroy student_show ]
+  before_action :set_lesson, only: %i[ show edit update destroy student_show reorder update_positions ]
 
   # GET /lessons or /lessons.json
   def index
     @lessons = Lesson.all
     @is_student = false
+  end
+
+  # GET /lessons/1/reorder
+  def reorder
+    @pages = @lesson.pages.order(:position)
+    @games = @lesson.games.order(:position)
+    @sidebar_items = (@pages.to_a + @games.to_a).sort_by(&:position)
+  end
+
+  # PATCH /lessons/1/update_positions
+  def update_positions
+    params[:positions].each do |item|
+      if item[:type] == "Page"
+        Page.find(item[:id]).update(position: item[:position])
+      elsif item[:type] == "Game"
+        Game.find(item[:id]).update(position: item[:position])
+      end
+    end
+    head :ok
   end
 
   # GET /lessons/student_index

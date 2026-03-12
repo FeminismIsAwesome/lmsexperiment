@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_12_013531) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_052758) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_013531) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "page_translations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "locale", null: false
+    t.bigint "page_id", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["page_id", "locale"], name: "index_page_translations_on_page_id_and_locale", unique: true
+    t.index ["page_id"], name: "index_page_translations_on_page_id"
+  end
+
   create_table "page_views", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "page_id", null: false
@@ -141,6 +151,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_013531) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "events", "games"
   add_foreign_key "games", "lessons"
+  add_foreign_key "page_translations", "pages"
   add_foreign_key "page_views", "pages"
   add_foreign_key "pages", "lessons"
   add_foreign_key "question_options", "questions"

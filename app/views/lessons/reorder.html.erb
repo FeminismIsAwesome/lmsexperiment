@@ -1,0 +1,62 @@
+<div class="lesson-layout">
+  <aside class="sidebar">
+    <div class="instructor-badge" style="display: block; text-align: center;">
+      Instructor Mode
+    </div>
+
+    <div class="sidebar-section">
+      <h4 class="sidebar-title">Reordering: <%= @lesson.title %></h4>
+      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Drag items to change their order. Changes are saved automatically.
+      </p>
+    </div>
+
+    <div class="sidebar-section" style="margin-top: 3rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+      <%= link_to "← Back to lesson", lesson_path(@lesson), class: "nav-item" %>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="card" style="padding: 2.5rem; min-height: 60vh;">
+      <h1 style="margin-top: 0; margin-bottom: 2rem; font-size: 2rem;">Rearrange Items</h1>
+      
+      <div id="reorder-container" data-controller="reorder" data-reorder-url-value="<%= update_positions_lesson_path(@lesson) %>" class="reorder-list" style="user-select: none; -webkit-user-select: none;">
+        <% @sidebar_items.each do |item| %>
+          <div class="reorder-item card" 
+               data-id="<%= item.id %>" 
+               data-type="<%= item.class.name %>"
+               style="margin-bottom: 1rem; padding: 1rem; cursor: grab; display: flex; align-items: center; gap: 1rem; border: 1px solid var(--border-color); background: white;">
+            <div class="drag-handle" style="color: var(--text-muted); cursor: grab;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+            </div>
+            <div style="flex-grow: 1;">
+              <strong><%= item.is_a?(Game) ? "🎮 " : "" %><%= item.title %></strong>
+              <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.5rem;">
+                (<%= item.class.name %>)
+              </span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @sidebar_items.empty? %>
+        <div style="text-align: center; color: var(--text-muted); padding-top: 4rem;">
+          <p>This lesson doesn't have any items to reorder.</p>
+        </div>
+      <% end %>
+    </div>
+  </main>
+</div>
+
+<style>
+  .reorder-item.bg-gray-100 {
+    background-color: #f3f4f6 !important;
+    border-style: dashed !important;
+    opacity: 0.5;
+  }
+  .sortable-fallback {
+    opacity: 1 !important;
+    background-color: white !important;
+    box-shadow: var(--shadow-md);
+  }
+</style>

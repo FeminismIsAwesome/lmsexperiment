@@ -21,7 +21,6 @@ class PageTest < ActiveSupport::TestCase
     assert_not page.valid?
     assert_includes page.errors[:title], "can't be blank"
     assert_includes page.errors[:content], "can't be blank"
-    assert_includes page.errors[:position], "can't be blank"
     assert_includes page.errors[:lesson], "must exist"
   end
 end

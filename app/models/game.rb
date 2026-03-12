@@ -2,7 +2,8 @@ class Game < ApplicationRecord
   belongs_to :lesson
   has_many :events, dependent: :destroy
 
-  validates :title, :game_type, :position, presence: true
+  before_validation :set_default_position
+  validates :title, :game_type, presence: true
 
   DEFAULT_WORDS = ["Honest", "trust", "equality", "boundaries", "communication", "respect"].freeze
 
@@ -24,5 +25,15 @@ class Game < ApplicationRecord
 
   def unique_engagements
     events.where(event_type: "engaged").distinct.count(:session_hash)
+  end
+  def set_default_position
+    return if position.present?
+    return if lesson.nil?
+
+    max_position = [
+      lesson.pages.maximum(:position) || 0,
+      lesson.games.maximum(:position) || 0
+    ].max
+    self.position = max_position + 1
   end
 end

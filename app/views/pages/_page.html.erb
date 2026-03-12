@@ -1,6 +1,6 @@
 <div id="<%= dom_id page %>">
   <div class="page-body">
-    <%= page.content %>
+    <%= page.translated_content(I18n.locale) %>
   </div>
 
   <% if page.questions.any? %>
@@ -95,18 +95,18 @@
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div>
         <% if page.previous_page %>
-          <% prev_path = @is_student ? student_show_lesson_path(page.lesson, page_id: page.previous_page.id) : lesson_path(page.lesson, page_id: page.previous_page.id) %>
+          <% prev_path = @is_student ? student_show_lesson_path(page.lesson, page_id: page.previous_page.id, locale: params[:locale]) : lesson_path(page.lesson, page_id: page.previous_page.id, locale: params[:locale]) %>
           <%= link_to prev_path, class: "btn btn-outline" do %>
-            ← Previous: <%= page.previous_page.title %>
+            ← Previous: <%= page.previous_page.translated_title(I18n.locale) %>
           <% end %>
         <% end %>
       </div>
 
       <div>
         <% if page.next_page %>
-          <% next_path = @is_student ? student_show_lesson_path(page.lesson, page_id: page.next_page.id) : lesson_path(page.lesson, page_id: page.next_page.id) %>
+          <% next_path = @is_student ? student_show_lesson_path(page.lesson, page_id: page.next_page.id, locale: params[:locale]) : lesson_path(page.lesson, page_id: page.next_page.id, locale: params[:locale]) %>
           <%= link_to next_path, class: "btn btn-primary" do %>
-            Next: <%= page.next_page.title %> →
+            Next: <%= page.next_page.translated_title(I18n.locale) %> →
           <% end %>
         <% end %>
       </div>

@@ -63,4 +63,32 @@ Game.find_or_create_by!(lesson: lesson2, title: "Social Wellbeing - The Principl
   g.position = 2
 end
 
+# Lesson 3: Multilingual Support
+puts "Creating Multilingual Lesson..."
+lesson3 = Lesson.find_or_create_by!(title: "Multilingual Support")
+
+# Page 1: Introduction to Multi-languages
+p4 = Page.find_or_initialize_by(lesson: lesson3, title: "Language Support")
+p4.position = 1
+
+# Ensure English translation exists
+p4.page_translations.find_or_initialize_by(locale: 'en') do |t|
+  t.title = "Language Support"
+  t.content = "<div>This lesson demonstrates how we can support multiple languages. You can switch between English, Spanish, and French using the locale switcher in the navigation bar.</div>"
+end
+
+# Add Spanish translation
+p4.page_translations.find_or_initialize_by(locale: 'es') do |t|
+  t.title = "Soporte de Idiomas"
+  t.content = "<div>Esta lección demuestra cómo podemos admitir varios idiomas. Puede cambiar entre inglés, español y francés utilizando el selector de configuración regional en la barra de navegación.</div>"
+end
+
+# Add French translation
+p4.page_translations.find_or_initialize_by(locale: 'fr') do |t|
+  t.title = "Support Linguistique"
+  t.content = "<div>Cette leçon montre comment nous pouvons prendre en charge plusieurs langues. Vous pouvez basculer entre l'anglais, l'espagnol et le français à l'aide du sélecteur de langue dans la barre de navigation.</div>"
+end
+
+p4.save!
+
 puts "Seed data successfully loaded!"
